@@ -1,0 +1,4 @@
+name : Jack         ID : 20164010      score : 89 
+name : Bob          ID : 20164011      score : 30 
+name : Steff        ID : 20164012      score : 70 
+name : Kaven        ID : 20164013      score : 65 
