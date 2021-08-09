@@ -10,20 +10,20 @@ org	0100h
 
 [SECTION .gdt]
 ; GDT
-;                                         段基址,       段界限     , 属性
-LABEL_GDT:         Descriptor       0,                 0, 0     	; 空描述符
-LABEL_DESC_NORMAL: Descriptor       0,            0ffffh, DA_DRW	; Normal 描述符
-LABEL_DESC_CODE32: Descriptor       0,  SegCode32Len - 1, DA_C + DA_32	; 非一致代码段, 32
-LABEL_DESC_CODE16: Descriptor       0,            0ffffh, DA_C		; 非一致代码段, 16
-LABEL_DESC_DATA:   Descriptor       0,       DataLen - 1, DA_DRW+DA_DPL1	; Data
-LABEL_DESC_STACK:  Descriptor       0,        TopOfStack, DA_DRWA + DA_32; Stack, 32 位
-LABEL_DESC_LDT:    Descriptor       0,        LDTLen - 1, DA_LDT	; LDT
-LABEL_DESC_VIDEO:  Descriptor 0B8000h,            0ffffh, DA_DRW	; 显存首地址
+;                             段基址,    段界限, 			属性
+LABEL_GDT:         Descriptor 0,         0, 				0     			; 空描述符
+LABEL_DESC_NORMAL: Descriptor 0,        0ffffh, 			DA_DRW			; Normal 描述符
+LABEL_DESC_CODE32: Descriptor 0, 		SegCode32Len - 1, 	DA_C + DA_32	; 非一致代码段, 32
+LABEL_DESC_CODE16: Descriptor 0,        0ffffh, 			DA_C			; 非一致代码段, 16
+LABEL_DESC_DATA:   Descriptor 0,       	DataLen - 1, 		DA_DRW+DA_DPL1	; Data
+LABEL_DESC_STACK:  Descriptor 0,        TopOfStack, 		DA_DRWA + DA_32	; Stack, 32 位
+LABEL_DESC_LDT:    Descriptor 0,        LDTLen - 1, 		DA_LDT			; LDT
+LABEL_DESC_VIDEO:  Descriptor 0B8000h,  0ffffh, 			DA_DRW			; 显存首地址
 ; GDT 结束
 
 GdtLen		equ	$ - LABEL_GDT	; GDT长度
-GdtPtr		dw	GdtLen - 1	; GDT界限
-		dd	0		; GDT基地址
+GdtPtr		dw	GdtLen - 1		; GDT界限
+			dd	0				; GDT基地址
 
 ; GDT 选择子
 SelectorNormal		equ	LABEL_DESC_NORMAL	- LABEL_GDT
@@ -31,7 +31,7 @@ SelectorCode32		equ	LABEL_DESC_CODE32	- LABEL_GDT
 SelectorCode16		equ	LABEL_DESC_CODE16	- LABEL_GDT
 SelectorData		equ	LABEL_DESC_DATA		- LABEL_GDT
 SelectorStack		equ	LABEL_DESC_STACK	- LABEL_GDT
-SelectorLDT		equ	LABEL_DESC_LDT		- LABEL_GDT
+SelectorLDT			equ	LABEL_DESC_LDT		- LABEL_GDT
 SelectorVideo		equ	LABEL_DESC_VIDEO	- LABEL_GDT
 ; END of [SECTION .gdt]
 
@@ -41,11 +41,11 @@ ALIGN	32
 LABEL_DATA:
 SPValueInRealMode	dw	0
 ; 字符串
-PMMessage:		db	"In Protect Mode now. ^-^", 0	; 进入保护模式后显示此字符串
+PMMessage:			db	"In Protect Mode now. ^-^", 0	; 进入保护模式后显示此字符串
 OffsetPMMessage		equ	PMMessage - $$
-StrTest:		db	"ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0
+StrTest:			db	"ABCDEFGHIJKLMNOPQRSTUVWXYZ", 0
 OffsetStrTest		equ	StrTest - $$
-DataLen			equ	$ - LABEL_DATA
+DataLen				equ	$ - LABEL_DATA
 ; END of [SECTION .data1]
 
 
@@ -141,7 +141,7 @@ LABEL_BEGIN:
 	mov	dword [GdtPtr + 2], eax	; [GdtPtr + 2] <- gdt 基地址
 
 	; 加载 GDTR
-	lgdt	[GdtPtr]
+	lgdt [GdtPtr]
 
 	; 关中断
 	cli
@@ -270,13 +270,13 @@ Code16Len	equ	$ - LABEL_SEG_CODE16
 [SECTION .ldt]
 ALIGN	32
 LABEL_LDT:
-;                            段基址       段界限      属性
-LABEL_LDT_DESC_CODEA: Descriptor 0, CodeALen - 1, DA_C + DA_32 ; Code, 32 位
+;                            		段基址      段界限      	属性
+LABEL_LDT_DESC_CODEA: 	Descriptor 	0, 			CodeALen - 1, DA_C + DA_32 ; Code, 32 位
 
 LDTLen		equ	$ - LABEL_LDT
 
 ; LDT 选择子
-SelectorLDTCodeA	equ	LABEL_LDT_DESC_CODEA	- LABEL_LDT + SA_TIL
+SelectorLDTCodeA	equ	LABEL_LDT_DESC_CODEA - LABEL_LDT + SA_TIL
 ; END of [SECTION .ldt]
 
 
@@ -286,10 +286,10 @@ ALIGN	32
 [BITS	32]
 LABEL_CODE_A:
 	mov	ax, SelectorVideo
-	mov	gs, ax			; 视频段选择子(目的)
+	mov	gs, ax					; 视频段选择子(目的)
 
 	mov	edi, (80 * 12 + 0) * 2	; 屏幕第 10 行, 第 0 列。
-	mov	ah, 0Ch			; 0000: 黑底    1100: 红字
+	mov	ah, 0Ch					; 0000: 黑底    1100: 红字
 	mov	al, 'L'
 	mov	[gs:edi], ax
 
