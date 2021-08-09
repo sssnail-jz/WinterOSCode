@@ -36,7 +36,7 @@ LABEL_START:
 	mov	es, ax
 	mov	ss, ax
 	mov	sp, BaseOfStack
-
+ 
 	; 清屏
 	mov	ax, 0600h		; AH = 6,  AL = 0h
 	mov	bx, 0700h		; 黑底白字(BL = 07h)
