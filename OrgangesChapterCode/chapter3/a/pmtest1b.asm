@@ -8,6 +8,7 @@
 	org	0100h
 	jmp	LABEL_BEGIN
 
+
 [SECTION .gdt]
 ; GDT
 ;                              段基址,      段界限     , 属性
